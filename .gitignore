@@ -32,3 +32,8 @@ go.work.sum
 # Editor/IDE
 # .idea/
 # .vscode/
+
+# Generated output
+/index.html
+/maps.json
+/pages/
