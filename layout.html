@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{.Title}}</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; max-width: 900px; margin: 40px auto; padding: 0 20px; background: #121212; color: #e0e0e0; }
+        h1 { border-bottom: 2px solid #333; padding-bottom: 10px; }
+        input[type="text"] { width: 100%; padding: 10px; font-size: 16px; background: #1e1e1e; border: 1px solid #333; color: #fff; margin-bottom: 20px; border-radius: 4px; box-sizing: border-box; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { text-align: left; padding: 12px; border-bottom: 1px solid #222; }
+        th { background: #1e1e1e; }
+        a { color: #4dabf7; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        .back-btn { display: inline-block; margin-bottom: 20px; font-weight: bold; }
+        .hidden { display: none !important; }
+        .meta-box { background: #1e1e1e; padding: 20px; border-radius: 6px; border: 1px solid #333; margin-top: 20px; }
+        /* Wiki page content styling (mirrors scmapdb page-content look) */
+        .page-content { margin-top: 20px; line-height: 1.6; }
+        .page-content img { max-width: 100%; height: auto; border-radius: 4px; }
+        .page-content h1, .page-content h2, .page-content h3 { border-bottom: 1px solid #333; padding-bottom: 6px; }
+        .page-content table { width: auto; border-collapse: collapse; margin: 12px 0; }
+        .page-content td, .page-content th { border: 1px solid #333; padding: 8px; }
+        .page-content a { color: #4dabf7; }
+        .page-content code, .page-content pre { background: #1e1e1e; padding: 2px 6px; border-radius: 3px; }
+        .screenshot-strip {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 10px;
+            max-width: 100%;
+            width: 100%;
+        }
+        .screenshot-strip img { width: 100%; height: auto; border-radius: 4px; border: 1px solid #333; }
+        .btn-download { background: #2b8a3e; color: white; padding: 10px 20px; border-radius: 4px; display: inline-block; }
+        .btn-none { background: #444; color: #999; padding: 10px 20px; border-radius: 4px; display: inline-block; pointer-events: none; }
+        #detailMirrors a { margin-right: 12px; }
+    </style>
+</head>
+<body>
+
+    <h1><a href="#" style="color: inherit; text-decoration: none;">{{.Title}}</a></h1>
+
+    <!-- VIEW 1: MAP LIST & SEARCH -->
+    <div id="listView">
+        <p>Directory for <a href="https://scmapdb.wikidot.com">SCMapDB</a> (Not Affiliated With)</p>
+        <input type="text" id="searchInput" placeholder="Search by map name, author, BSP filename, tags..." oninput="filterMaps()">
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Map Name</th>
+                    <th>Author</th>
+                    <th>Difficulty</th>
+                    <th>Rating</th>
+                    <th>BSP Filename</th>
+                </tr>
+            </thead>
+            <tbody id="mapTableBody">
+                <tr><td colspan="5" style="text-align: center; color: #888;">Loading maps...</td></tr>
+                <tr><td colspan="5" style="text-align: center; color: #888;" class="no-results"></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- VIEW 2: INDIVIDUAL MAP PAGE -->
+    <div id="detailView" class="hidden">
+        <a href="#" class="back-btn">&larr; Back to Map List</a>
+        <div class="meta-box">
+            <h2 id="detailTitle" style="margin-top: 0;"></h2>
+            <p><strong>Author:</strong> <span id="detailAuthor"></span></p>
+            <p><strong>Difficulty:</strong> <span id="detailDifficulty"></span></p>
+            <p><strong>Size:</strong> <span id="detailSize"></span></p>
+            <p id="detailBspRow" style="display:none;"><strong>.bsp filename(s):</strong> <span id="detailBsp"></span></p>
+            <p id="detailReleaseRow" style="display:none;"><strong>Date of release:</strong> <span id="detailRelease"></span></p>
+            <p id="detailOrigReleaseRow" style="display:none;"><strong>Original mod release:</strong> <span id="detailOrigRelease"></span></p>
+            <p><strong>Rating:</strong> <span id="detailRating"></span></p>
+            <p style="margin-top: 30px;">
+                <a id="detailDownload" href="#" target="_blank" class="btn-download">Download Map</a>
+                <a id="detailOriginal" href="#" target="_blank" style="background: #1e5a8a; color: white; padding: 10px 20px; border-radius: 4px; display: inline-block; margin-left: 10px;">View on SCMapDB</a>
+            </p>
+            <p id="detailMirrors" style="display:none;"></p>
+        </div>
+        <div id="detailContent" class="page-content"></div>
+    </div>
+
+    <!-- Inline map data: generated at build time so search works without any fetch (including file://) -->
+    <script>
+        var MAPS_DATA = {{.Maps}};
+    </script>
+
+    <!-- Load external application logic -->
+    <script src="index.js"></script>
+</body>
+</html>
